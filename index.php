@@ -84,16 +84,34 @@
                     </script>
                 </tbody>
             </table>
-
         </td>
-    <form id="kekw" action="action.php" method="get">
+<!--    <form id="kekw" action="action.php" method="get">-->
         <input type="hidden" id="x_value" name="x_value" value="-3">
         <input type="hidden" id="r_value" name="r_value" value="1">
         <td class="y_block" align="middle">
             <h3>Y (от -5 до 5)</h3>
             <input type="text" name="Y" id="y_field" required maxlength="8">
         </td>
-    </form>
+<!--    </form>-->
+        <script>
+            function send(){
+                let time = new Date();
+                time = time.getTimezoneOffset()/60*(-1);
+                console.log(time);
+                let x = document.getElementById("x_value").value;
+                let y = document.getElementById("y_field").value;
+                let r = document.getElementById("r_value").value;
+                const request = new XMLHttpRequest();
+                const url = "action.php?x_value=" + x + "&y_field=" + y + "&r_value=" + r + "&time=" + time;
+                request.open("GET",url);
+                request.send();
+                request.onload = function (){
+                    console.log(request.responseText);
+                    document.getElementById("mainTB").innerHTML = request.responseText;
+                    //location.reload();
+                }
+            }
+        </script>
         <td>
                 <table class="RButtons">
                     <tbody>
@@ -150,7 +168,7 @@
     </tr>
     <tr>
         <td align="middle" colspan="4">
-                <button form="kekw" id="submitButton" type="submit">submit</button>
+                <button form="kekw" id="submitButton" onclick="send()">submit</button>
                 <button type="submit" form="clear">clear</button>
             <form id="clear" action="clear.php"></form>
 
@@ -164,7 +182,19 @@
         <td align="middle" colspan="4">
 <!--        <table class="tabl" border="1" cellpadding="0" cellspacing="0" width="50%">-->
             <table id="tabl">
-                <?php include 'table.php';?>
+                <table border='1' cellpadding='0' cellspacing='0' width='50%'>
+                    <tr>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>R</th>
+                        <th>Shot</th>
+                        <th>Current time</th>
+                        <th>Lead time(μs)</th>
+                    </tr>
+                    <tbody id = "mainTB">
+                    <?php include 'table.php';?>
+                    </tbody>
+                </table>
             </table>
 <!--            <tr>-->
 <!--                <th>-->
